@@ -1,1 +1,2 @@
-Prueba de crear un archivo con vim
+Prueba 1 de crear un archivo con vim.
+Prueba 2 ingresar datos.
