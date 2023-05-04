@@ -1,0 +1,128 @@
+ 	
+Práctico usos de VIM
+	
+Objetivo
+
+El objetivo de este práctico es comenzar a familiarizar al usuario con el uso de VIM. Uno de los primeros, y tal vez de no ser el único si es el más limitante, es su poca intuitividad al momento de su uso.
+
+ 
+
+Mediante el siguiente práctico vamos a ejecutar un set de instrucciones que nos brindarán un conjunto de pasos que una vez adquiridos nos permitirán usar VIM sin complicaciones.
+
+ 
+
+La única forma de aprender a usar VIM, es justamente, usando VIM. Una vez que esté dentro de nuestra zona de confort podremos hacer uso de un editor de texto veloz liviano; pero por sobretodo, y esto es lo más importante, disponible en cualquier entorno UNIX.
+
+ 
+Ingreso de texto
+
+Primariamente vamos a crear un archivo llamado dias_de_la_semana.txt e ingresaremos el siguiente texto:
+
+ 
+
+monday
+
+martes
+
+miercoles
+
+jueves
+
+sabado
+
+ 
+
+Los siguientes pasos debemos ejecutarlos usando las combinaciones de teclas.
+
+ 
+
+    Seguido de esto vayamos a la última linea y agreguemos una nueva linea por debajo e ingresemos la palabra domingo.
+
+ 
+
+monday
+
+martes
+
+miercoles
+
+jueves
+
+sabado
+
+domingo
+
+ 
+
+    Volvamos a ubicarnos en sabado e ingresemos por encima la palabra viernes
+
+ 
+
+monday
+
+martes
+
+miercoles
+
+jueves
+
+viernes
+
+sabado
+
+domingo
+
+ 
+
+    Vamos a ubicarnos en sabado y al final de la linea agregaremos “# no laborable”. Haremos lo mismo con domingo
+
+ 
+
+monday
+
+martes
+
+miercoles
+
+jueves
+
+viernes
+
+sabado # no laborable
+
+domingo # no laborable
+
+ 
+
+    Grabaremos los cambios sin salir.
+    Para las siguientes líneas realizaremos una sustitución a derecha de la palabras monday → lunes
+    Luego cambiaremos cada una de las letras del inicio de la palabra por una mayúscula
+
+Lunes
+
+Martes
+
+Miércoles
+
+Jueves
+
+Viernes
+
+Sabado # no laborable
+
+Domingo # no laborable
+
+ 
+
+    Por último, guardemos y salgamos.
+
+Seteo de entorno
+
+ 
+
+Hagamos, de forma persistente, que la próxima vez que iniciemos VIM tengamos el siguiente entorno:
+
+    Identado de dos espacios
+    Mostrar los números de lineas (esto no está en el apunte… y no lo puse a propósito).
+
+Muchos éxitos💪
