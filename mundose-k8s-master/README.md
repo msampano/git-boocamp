@@ -1,1 +1,0 @@
-# mundose-k8s
