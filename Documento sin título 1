@@ -1,0 +1,140 @@
+IAM
+Creacion del usuario deploy permisos adminaccess, habilitacion inicio de sesion de consola creacion de claves programaticas
+Ingresamos a la consola de aws con el usuario deploy 
+
+Creación del rol ec2-admin desde el IAM en la sessión de roles
+
+Creación de la maquina Bastion caracteristicas ubuntu,t2.micro, redes publicas acceso a internet p8080 y ssh 22, disco 8gb gt2
+con el scritp de aplicaciones seccion detalles avanzados--datos personales. 
+
+ Como nos conectamos a la maquina bastion desde el boton de conectar EC2 copiamos el archivo pin.perm cambiamos los permisos chmod 400
+ y desde el terminal colocamos el comando ssh -i
+ 
+ En el ec2 configuramos el rol ec2-admin y modificamos el rol de iam en la maquina bastion 
+ 
+ Cargamos las claves programaticas de usuario deploy con aws configure en el bastion
+ 
+ Procedemos a hacer un git clone de nuestro repo donde se encuentra los scripts de creacion de cluster
+ 
+ ---------------------------------------------
+ 
+ Primero ingresamos al repo clonado y buscamos el script create-cluster.sh le cambiamos los permisos de ejecución chmod +x y ejecutamos el script con  ./create-cluster.sh y comienza a crear el cluster de tres instancias t2.small 
+ 
+ Despues de esperar 30 minutos de que cree las instancias en EC2, las redes virtuales vpc 
+ 
+ #!/bin/bash
+
+# Variables
+CLUSTER_NAME=mundoes-cluster-G6
+AWS_REGION=us-east-2
+
+# Set AWS credentials 
+aws sts get-caller-identity >> /dev/null
+if [ $? -eq 0 ]
+then
+  echo "Credenciales testeadas, proceder con la creacion de cluster."
+
+  # Creacion de cluster
+  eksctl create cluster \
+  --name $CLUSTER_NAME \ nombre de cluster
+  --region $AWS_REGION \ region de aws que estamos trabajando
+  --nodes 3 \ numero de instancias del nodo
+  --node-type t2.small \ tipo de instancias
+  --with-oidc \
+  --ssh-access \
+  --ssh-public-key jenkins \ pares de claves creadas anteriomente
+  --managed \
+  --full-ecr-access \
+  --zones us-east-2a,us-east-2b,us-east-2c /subzonas de region
+
+  if [ $? -eq 0 ]
+  then
+    echo "Cluster Setup Completo con eksctl ."
+  else
+    echo "Cluster Setup Falló mientras se ejecuto eksctl."
+  fi
+else
+  echo "Please run aws configure & set right credentials." /configuracion previa de las claves programaticas.
+  echo "Cluster setup failed."
+  
+  
+ 
+ El despliegue lo realizamos desde el bastion
+ Despliegue de tres contenedores con la aplicación de tres nginx con el manifiesto nginx-deployment.yaml
+ 
+kubectl apply -f nginx-deployment.yaml
+ 
+ apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3 #configuramos tres replicas 
+   template
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service # es un servicio para exponer la aplicación     con  #Loadbalancer
+metadata:
+  name: nginx
+  namespace: default
+  labels:
+    app: nginx
+spec:
+  externalTrafficPolicy: Local
+  ports:
+  - name: http
+   port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx
+  type: LoadBalancer 
+
+Verificamos que esten creados con el comando 
+kubectl get nodes
+
+kubectl get service para ver la url  y hacer las prueba 
+
+
+Instalamos los drivers ebs, creamos la politica y creamos el addon
+
+
+Instalamos prometheus
+con kubectl get pvc prometheus -n
+
+Exponemos el servicio haciendo una redirección de puertos
+kubectl port-forward -n prometheus deploy/prometheus-server 8080:9090 --address
+0.0.0.0
+
+Instalamos grafana
+kubectl create namespace grafana
+Ejecutamos SCRIPT ./grafana.deploy.yaml este llama al manifiesto grafana.yaml
+
+Ingresamos al portal de grafana con los password configurados anteriormente
+
+Configuramos los dashboard 
+
+Eliminamos el cluster, la vpc y los volumenes.
+
+
+
+
+
+ 
+
+  
